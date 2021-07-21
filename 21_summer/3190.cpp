@@ -1,8 +1,8 @@
 #include <iostream>
 #include <queue>
-#define NOTHING 0
-#define UNVISITED 1
-#define LOCATED 2
+#define NOTHING 0   //아무것도 없는 공간
+#define UNVISITED 1 //사과가 있는 공간
+#define LOCATED 2   //뱀이 있는 공간
 using namespace std;
 
 class Dummy
@@ -150,10 +150,10 @@ bool Dummy::checkMove()
 int Dummy::startGame()
 {
     matrix[0][0] = LOCATED;
-    //snakeSize 뱀길이 count 시간
+    //count 시간
     while (checkMove())
     {
-        //apple있을때 없을때
+        // 먼저 방향에 따라 queue에 push한다.
         if (direction == "Right")
         {
             snakeRow.push(snakeRow.back() + 1);
@@ -175,6 +175,8 @@ int Dummy::startGame()
             snakeColumn.push(snakeColumn.back() + 1);
         }
 
+        /*push한 이후에 그곳에 사과가 있다면 장소에 대한 정보만 바꾸고
+        그렇지 않다면 뱀의 꼬리 지점인 front에서 pop을 하고 장소 정보를 변경한다.*/
         if (matrix[snakeRow.back()][snakeColumn.back()] == NOTHING)
         {
             matrix[snakeRow.back()][snakeColumn.back()] = LOCATED;
@@ -189,5 +191,9 @@ int Dummy::startGame()
         count++;
         rotateDirection();
     }
+    /* +1의 이유는 원하는 끝나는 시간인데, 
+    위의 알고리즘에선 count초 후에 반복문이 끝나기 때문에
+    count초는 마지막 구간이고, count+1이 뱀이나 벽에 부딪혀 끝나는 지점이다.
+    */
     return count + 1;
 }
